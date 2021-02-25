@@ -29,6 +29,22 @@ class Order extends Filter implements iOrder
         0 => 'https://api.justin.ua',
 
     ];
+     /**
+     *
+     * ADDRESS API
+     *
+     * @var STRING
+     *
+     */
+    private $address_api = 'https://api.justin.ua';
+     /**
+     *
+     * SANDBOX API
+     *
+     * @var STRING
+     *
+     */
+    private $sandbox_api = 'https://api.sandbox.justin.ua';
     /**
      *
      * DATA ORDER
@@ -69,11 +85,13 @@ class Order extends Filter implements iOrder
 
         if (!$sandbox) {
 
-            $this->orderApi[1] = "api_pms/hs/api/${version}";
+            $this->orderApi[0] = $this->address_api;
+            $this->orderApi[1] = "justin_pms/hs/api/${version}";
 
         } else {
 
-            $this->orderApi[1] = "api_pms_demo/hs/api/${version}";
+            $this->orderApi[0] = $this->sandbox_api;
+            $this->orderApi[1] = "client_api/hs/api/${version}";
 
         }
 
