@@ -51,6 +51,14 @@ class Justin extends Order implements iJustin
     private $address_api = 'https://api.justin.ua';
     /**
      *
+     * SANDBOX API
+     *
+     * @var STRING
+     *
+     */
+    private $sandbox_api = 'https://api.sandbox.justin.ua';
+    /**
+     *
      * OPEN API URL
      *
      * @var STRING
@@ -155,10 +163,10 @@ class Justin extends Order implements iJustin
 
         );
 
-        $this->api[0] = $this->address_api;
+        $sandbox_type = $sandbox ? 'client_api' : 'justin_pms';
 
         return $this
-            ->setSandbox($sandbox)
+            ->setSandbox($sandbox, $sandbox_type)
             ->setVersion($version)
             ->setLanguage($language);
 
@@ -181,13 +189,15 @@ class Justin extends Order implements iJustin
 
         if ($sandbox) {
 
-            $this->api[1] = "${type}_test/hs";
+            $this->api[0] = $this->sandbox_api;
 
         } else {
 
-            $this->api[1] = "${type}/hs";
+            $this->api[0] = $this->address_api;
 
         }
+
+        $this->api[1] = "${type}/hs";
 
         return $this;
 
@@ -1554,15 +1564,15 @@ class Justin extends Order implements iJustin
             #
             if ($this->sandbox) {
 
-                $space = 'api_pms_demo';
+                $space = 'client_api';
 
             } else {
 
-                $space = 'pms';
+                $space = 'justin_pms';
 
             }
 
-            $url = "{$this->address_api}/${space}/hs/api/${version}/${type}/order?order_number=${orderNumber}&api_key=" . $this->key;
+            $url = "{$this->api[0]}/${space}/hs/api/${version}/${type}/order?order_number=${orderNumber}&api_key=" . $this->key;
 
             if (!$show) {
 
